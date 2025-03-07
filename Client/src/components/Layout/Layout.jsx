@@ -1,17 +1,32 @@
-import React from 'react'
-import Headers from './Headers'
-import Footer from './Footer'
+import React from 'react';
+import Headers from './Headers';
+import Footer from './Footer';
+import { Helmet } from 'react-helmet';
 
-const Layout = ({children}) => {
+const Layout = ({ children, title, description, keywords, author }) => {
   return (
     <div>
-       <Headers></Headers>
-       <main style={{minHeight:"85vh"}}>
-         {children}
-      </main>    
-        <Footer></Footer>  
+      <Helmet>
+        <meta charSet="utf-8" />
+        <meta name="description" content={description} />
+        <meta name="keywords" content={keywords} />
+        <meta name="author" content={author} />
+        <title>{title}</title>
+      </Helmet>
+      <Headers />
+      <main style={{ minHeight: '80vh' }}>
+        {children}
+      </main>
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+Layout.defaultProps = {
+  title: 'Ecommerce app - shop now',
+  description: 'mern stack project',
+  keywords: 'mern, react, node, mongodb',
+  author: 'Abir Sheikh',
+};
+
+export default Layout; // Correct export
