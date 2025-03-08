@@ -1,4 +1,4 @@
-const e = require('express')
+
 const mongoose = require('mongoose')
 
 const connectDB = async ()=>{

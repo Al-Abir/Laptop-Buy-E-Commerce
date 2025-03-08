@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 const morgan = require('morgan');
 const connectDB = require('./confiq/db');
 const authRoutes = require('./routes/authRoute')
-
+const cors = require('cors')
 
 //confiqure env file
 dotenv.config();
@@ -13,7 +13,8 @@ connectDB();
 //rest object
 const app = express();
 
-//middlewares
+//middlewares 
+app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
 
