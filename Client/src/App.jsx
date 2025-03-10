@@ -6,7 +6,7 @@ import Policy from './pages/Policy'
 import Pagenotfound from './pages/Pagenotfound'
 import Register from './pages/Auth/Register'
 import Login from './pages/Auth/Login'
-
+import Dashboard from './pages/user/Dashboard'
 function App() {
 
 
@@ -14,6 +14,7 @@ function App() {
     <>
       <Routes>
         <Route path='/'element={<HomePage></HomePage>}></Route>
+        <Route path='/dashboard'element={<Dashboard></Dashboard>}></Route>
         <Route path='/register'element={<Register></Register>}></Route>
         <Route path='/login'element={<Login></Login>}></Route>
         <Route path='/about'element={<About></About>}></Route>
