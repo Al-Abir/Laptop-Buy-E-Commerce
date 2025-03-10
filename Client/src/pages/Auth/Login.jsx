@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import Layout from "../../components/Layout/Layout";
 import { useAuth } from "../../context/auth";
@@ -11,12 +11,15 @@ const Login = () => {
     password: "",
   });
 
+
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
 
   useEffect(() => {
     if (auth.token) {
-      navigate("/"); // ✅ Redirect if user is already logged in
+      navigate(location.state || "/"); 
     }
   }, [auth, navigate]);
 

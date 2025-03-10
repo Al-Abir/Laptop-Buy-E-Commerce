@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerController, loginController,testController  } = require('../controllers/authController');
+const { registerController, loginController,testController } = require('../controllers/authController');
 const {requireSignIn,isAdmin} = require("../middlewares/authMiddleware")
 const router = express.Router();
 
@@ -8,6 +8,7 @@ router.post("/register", registerController);
 
 //login
 router.post("/login", loginController);
+//forgot - password
 
 //test routes
 router.get("/test",requireSignIn,isAdmin, testController);

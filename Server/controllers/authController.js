@@ -94,6 +94,7 @@ const loginController = async(req,res) => {
 
 }
 
+
 const testController = (req, res)=>{
    res.send("Protected Routes")
 }
