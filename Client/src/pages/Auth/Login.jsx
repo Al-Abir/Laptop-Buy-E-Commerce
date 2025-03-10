@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast'
 import Layout from '../../components/Layout/Layout';
+import { useAuth } from '../../context/auth';
 import axios from 'axios'
 const Login= () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+  const[auth,setAuth] = useAuth();
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -21,7 +23,13 @@ const Login= () => {
         const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/auth/login`, formData);
         if(res.data.success){
             toast.success('User Registration Successfully');
-            navigate('/login')
+            setAuth({
+              ...auth,
+              user:res.data.user,
+              token:res.data.token,
+            })
+            localStorage.setItem('auth',JSON.stringify(res.data))
+            navigate('/')
         
             
         }else{
