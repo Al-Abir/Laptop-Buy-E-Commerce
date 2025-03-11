@@ -17,10 +17,9 @@ function App() {
     <>
       <Routes>
         <Route path='/'element={<HomePage></HomePage>}></Route>
-        <Route path='/dashboard' element={<PrivateRoute></PrivateRoute>}>
-              <Route path='user'element={<Dashboard></Dashboard>}></Route>
+        <Route path="/dashboard/user" element={<PrivateRoute />}>
+              <Route index element={<Dashboard />} />
         </Route>
-
         <Route path='/dashboard' element={<AdminRoute></AdminRoute>}>
               <Route path='admin'element={<AdminDashborad></AdminDashborad>}></Route>
         </Route>
