@@ -8,6 +8,8 @@ import Register from './pages/Auth/Register'
 import Login from './pages/Auth/Login'
 import Dashboard from './pages/user/Dashboard'
 import PrivateRoute from './components/Routes/Private'
+import AdminRoute from './components/Routes/AdminRoute'
+import AdminDashborad from './pages/Admin/AdminDashborad'
 function App() {
 
 
@@ -16,7 +18,11 @@ function App() {
       <Routes>
         <Route path='/'element={<HomePage></HomePage>}></Route>
         <Route path='/dashboard' element={<PrivateRoute></PrivateRoute>}>
-              <Route path=''element={<Dashboard></Dashboard>}></Route>
+              <Route path='user'element={<Dashboard></Dashboard>}></Route>
+        </Route>
+
+        <Route path='/dashboard' element={<AdminRoute></AdminRoute>}>
+              <Route path='admin'element={<AdminDashborad></AdminDashborad>}></Route>
         </Route>
         <Route path='/register'element={<Register></Register>}></Route>
         <Route path='/login'element={<Login></Login>}></Route>
