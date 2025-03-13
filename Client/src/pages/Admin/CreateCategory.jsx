@@ -1,7 +1,29 @@
-import React from 'react'
+
+import { useEffect,useState } from 'react'
 import Layout from '../../components/Layout/Layout'
 import AdminMenu from '../../components/Layout/AdminMenu'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 const CreateCategory = () => {
+  const[categories,setCategorie] = useState([]);
+
+ // get all data
+ const getAllCategory = async()=>{
+  
+     try {
+          const{data} = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/category/category-all`)
+          if(data.success){
+            setCategorie(data.categories)
+          }
+     } catch (error) {
+          console.log(error)
+          toast.error("Something went wrong in getting category")
+
+     }
+ }
+ useEffect(()=>{
+      getAllCategory()
+ },[])
   return (
     <Layout>
          <div className="container mx-auto p-4">
