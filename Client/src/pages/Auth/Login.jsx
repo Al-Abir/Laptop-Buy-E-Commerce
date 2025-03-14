@@ -40,8 +40,9 @@ const Login = () => {
           user: res.data.user,
           token: res.data.token,
         });
-
-        localStorage.setItem("auth", JSON.stringify(res.data));
+  
+        // Store only the token in localStorage
+        localStorage.setItem("auth", JSON.stringify({ token: res.data.token }));
         navigate("/"); // ✅ Ensure redirection happens
       } else {
         toast.error(res.data.message);

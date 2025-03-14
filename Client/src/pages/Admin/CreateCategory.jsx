@@ -3,22 +3,55 @@ import Layout from "../../components/Layout/Layout";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import toast from "react-hot-toast";
 import axios from "axios";
+import CategoryForm from "../../components/Form/CategoryForm";
 
 const CreateCategory = () => {
   const [categories, setCategories] = useState([]);
+  const [name, setName] = useState("");
+
+  // handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/v1/category/create-category`,
+        { name },
+        {
+          headers: {
+            Authorization: `${JSON.parse(localStorage.getItem("auth")).token}`,
+          },
+        }
+      );
+      if (data?.success) {
+        toast.success(`${name} is created`);
+        setName(""); // clear input after successful creation
+        getAllCategory(); // fetch updated category list
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong in input form");
+    }
+  };
 
   // Fetch categories
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/v1/category/category-all`
+        `${import.meta.env.VITE_API_URL}/api/v1/category/category-all`,
+        {
+          headers: {
+            Authorization:`${JSON.parse(localStorage.getItem("auth")).token}`,
+          },
+        }
       );
       if (data.success) {
         setCategories(data.categories);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong in getting category");
+      toast.error("Something went wrong in getting categories");
     }
   };
 
@@ -36,7 +69,10 @@ const CreateCategory = () => {
           </div>
           {/* Main Content */}
           <div className="w-3/4 mt-3">
-            <h2>Create Category</h2>
+            <h2>Manage Category</h2>
+            <div className="p-4">
+              <CategoryForm handleSubmit={handleSubmit} value={name} setValue={setName} />
+            </div>
             <div className="overflow-x-auto w-full">
               <table className="w-1/2 border-collapse border border-gray-300">
                 <thead>
