@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 const AdminMenu = () => {
   return (
-    <div className="text-center">
+    <div className="text-center containr mx-auto p-4">
       <ul className="divide-y divide-gray-200 border border-gray-200 rounded-lg w-full max-w-md mx-auto">
         <h4 className="p-3 text-lg font-semibold bg-gray-100">Admin Panel</h4>
         <li>
