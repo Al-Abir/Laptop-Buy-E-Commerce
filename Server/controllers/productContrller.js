@@ -4,51 +4,49 @@ const slugify = require('slugify')
 
 const createProductController = async (req, res) => {
     try {
-        const { name, description, price, category, quantity, shipping } = req.fields;
-        const { photo } = req.files;
-
-        // Validation
-        switch (true) {
-            case !name:
-                return res.status(400).json({ error: "Name is required" });
-            case !description:
-                return res.status(400).json({ error: "Description is required" });
-            case !price:
-                return res.status(400).json({ error: "Price is required" });
-            case !category:
-                return res.status(400).json({ error: "Category is required" });
-            case !quantity:
-                return res.status(400).json({ error: "Quantity is required" });
-            case photo && photo.size > 1000000:
-                return res.status(400).json({ error: "Photo must be less than 1MB" });
-        }
-
-        // Create product
-        const product = new productModel({ ...req.fields, slug: slugify(name) });
-
-        // Handle photo
-        if (photo) {
-            product.photo.data = fs.readFileSync(photo.path);
-            product.photo.contentType = photo.type;
-        }
-
-        await product.save();
-        res.status(201).json({
-            success: true,
-            message: "Product created successfully",
-            product
-        });
-
+      const { name, description, price, category, quantity, shipping } = req.fields;
+      const { photo } = req.files;
+  
+      // Validation
+      switch (true) {
+        case !name:
+          return res.status(400).json({ error: "Name is required" });
+        case !description:
+          return res.status(400).json({ error: "Description is required" });
+        case !price:
+          return res.status(400).json({ error: "Price is required" });
+        case !category:
+          return res.status(400).json({ error: "Category is required" });
+        case !quantity:
+          return res.status(400).json({ error: "Quantity is required" });
+        case photo && photo.size > 1000000:
+          return res.status(400).json({ error: "Photo must be less than 1MB" });
+      }
+  
+      // Create product
+      const product = new productModel({ ...req.fields, slug: slugify(name) });
+  
+      // Handle photo
+      if (photo) {
+        product.photo.data = fs.readFileSync(photo.path);
+        product.photo.contentType = photo.type;
+      }
+  
+      await product.save();
+      res.status(201).json({
+        success: true,
+        message: "Product created successfully",
+        product,
+      });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Error creating product",
-            error: error.message
-        });
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: "Error creating product",
+        error: error.message,
+      });
     }
-}
-
+  };
 //get product
 
 const getProductController = async(req,res) =>{
