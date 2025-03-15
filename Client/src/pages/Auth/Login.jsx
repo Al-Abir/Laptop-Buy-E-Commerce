@@ -1,27 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import Layout from "../../components/Layout/Layout";
 import { useAuth } from "../../context/auth";
 import axios from "axios";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-
   useEffect(() => {
     if (auth.token) {
-      navigate(location.state || "/"); 
+      navigate(location.state || "/");
     }
-  }, [auth, navigate]);
+  }, [auth.token, navigate, location.state]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -34,22 +28,23 @@ const Login = () => {
         `${import.meta.env.VITE_API_URL}/api/v1/auth/login`,
         formData
       );
+
       if (res.data.success) {
         toast.success("User Logged In Successfully");
-        setAuth({
-          user: res.data.user,
-          token: res.data.token,
-        });
-  
-        // Store only the token in localStorage
-        localStorage.setItem("auth", JSON.stringify({ token: res.data.token }));
-        navigate("/"); // ✅ Ensure redirection happens
+        setAuth({ user: res.data.user, token: res.data.token });
+
+        localStorage.setItem(
+          "auth",
+          JSON.stringify({ user: res.data.user, token: res.data.token })
+        );
+
+        navigate("/");
       } else {
         toast.error(res.data.message);
       }
     } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong");
+      console.error("Login Error:", error);
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
