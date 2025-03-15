@@ -24,6 +24,14 @@ const AdminMenu = () => {
         </li>
         <li>
           <NavLink
+            to="/dashboard/admin/products"
+            className="block p-3 hover:bg-gray-100 transition"
+          >
+            Products
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
             to="/dashboard/admin/users"
             className="block p-3 hover:bg-gray-100 transition"
           >
