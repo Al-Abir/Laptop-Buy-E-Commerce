@@ -64,7 +64,7 @@ const Headers = () => {
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-lg">
                   <ul className="py-2 text-sm text-gray-700">
-                    {auth?.user?.role && (
+                    {auth?.user && (
                       <li>
                         <NavLink
                           to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
@@ -109,7 +109,7 @@ const Headers = () => {
             </>
           ) : (
             <>
-              {auth?.user?.role && (
+              {auth?.user && (
                 <NavLink
                   to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
                   className="text-white"
