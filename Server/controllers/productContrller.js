@@ -1,7 +1,7 @@
 const productModel = require('../models/productModel')
 const fs = require('fs')
 const slugify = require('slugify')
-
+const mongoose = require('mongoose')
 const createProductController = async (req, res) => {
     try {
       const { name, description, price, category, quantity, shipping } = req.fields;
@@ -91,17 +91,22 @@ const getSingleProductController = async(req, res)=>{
 }
 
 // product photo controller
-const mongoose = require("mongoose");
-
 const productPhotoController = async (req, res) => {
     try {
-        // Convert ID to ObjectId to prevent query issues
-        const productId = new mongoose.Types.ObjectId(req.params.pid);
+        const { pid } = req.params;
 
-        // Fetch product
+        // Validate ID format before conversion
+        if (!mongoose.Types.ObjectId.isValid(pid)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid product ID format",
+            });
+        }
+
+        const productId = new mongoose.Types.ObjectId(pid);
+
         const product = await productModel.findById(productId).select("photo");
 
-        // If product is not found
         if (!product) {
             return res.status(404).json({
                 success: false,
@@ -109,7 +114,6 @@ const productPhotoController = async (req, res) => {
             });
         }
 
-        // If product photo is missing
         if (!product.photo || !product.photo.data) {
             return res.status(404).json({
                 success: false,
@@ -117,7 +121,6 @@ const productPhotoController = async (req, res) => {
             });
         }
 
-        // Return image
         res.set("Content-Type", product.photo.contentType);
         return res.status(200).send(product.photo.data);
 
@@ -130,7 +133,6 @@ const productPhotoController = async (req, res) => {
         });
     }
 };
-
 //delete Controller
 
 const deleteController =  async(req,res)=>{
@@ -151,41 +153,42 @@ const deleteController =  async(req,res)=>{
 
 }
 
-const updateProductController = async(req,res)=>{
+const updateProductController = async (req, res) => {
     try {
         const { name, description, price, category, quantity, shipping } = req.fields;
         const { photo } = req.files;
 
         // Validation
-        switch (true) {
-            case !name:
-                return res.status(400).json({ error: "Name is required" });
-            case !description:
-                return res.status(400).json({ error: "Description is required" });
-            case !price:
-                return res.status(400).json({ error: "Price is required" });
-            case !category:
-                return res.status(400).json({ error: "Category is required" });
-            case !quantity:
-                return res.status(400).json({ error: "Quantity is required" });
-            case photo && photo.size > 1000000:
-                return res.status(400).json({ error: "Photo must be less than 1MB" });
+        if (!name) return res.status(400).json({ error: "Name is required" });
+        if (!description) return res.status(400).json({ error: "Description is required" });
+        if (!price) return res.status(400).json({ error: "Price is required" });
+        if (!category) return res.status(400).json({ error: "Category is required" });
+        if (!quantity) return res.status(400).json({ error: "Quantity is required" });
+        if (photo && photo.size > 1000000) {
+            return res.status(400).json({ error: "Photo must be less than 1MB" });
         }
 
-        // Create product
-        const product = await productModel.findByIdAndUpdate(req.params.pid,{
-            ...req.fields, slug:slugify(name)},{new:true})
+        // Update product
+        const product = await productModel.findByIdAndUpdate(
+            req.params.pid, // Ensure this matches the route parameter
+            { ...req.fields, slug: slugify(name) },
+            { new: true }
+          );
+
+        if (!product) {
+            return res.status(404).json({ error: "Product not found" });
+        }
 
         // Handle photo
         if (photo) {
             product.photo.data = fs.readFileSync(photo.path);
             product.photo.contentType = photo.type;
-        }
+          }
+          await product.save();
 
-        await product.save();
-        res.status(201).json({
+        res.status(200).json({
             success: true,
-            message: "Product update successfully",
+            message: "Product updated successfully",
             product
         });
 
@@ -193,11 +196,10 @@ const updateProductController = async(req,res)=>{
         console.error(error);
         res.status(500).json({
             success: false,
-            message: "Error update product",
+            message: "Error updating product",
             error: error.message
         });
     }
-
-}
+};
 
 module.exports = { createProductController,getProductController, getSingleProductController,productPhotoController,deleteController,updateProductController };

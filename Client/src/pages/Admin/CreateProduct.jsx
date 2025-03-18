@@ -54,9 +54,9 @@ const CreateProduct = () => {
       productData.append("category", category);
       productData.append("quantity", quantity);
       productData.append("shipping", shipping);
-      if (photo) {
-        productData.append("photo", photo);
-      }
+    
+      photo &&  productData.append("photo", photo);
+      
   
       // API call
       const { data } = await axios.post(
@@ -163,7 +163,7 @@ const CreateProduct = () => {
                 <input
                 type="text"
                 value={price}
-                placeholder="wrtie a name"
+                placeholder="price"
                 className="form-control w-full p-3 border border-gray-50 bg-blue-50 rounded-lg"
                 onChange={(e)=> setPrice(e.target.value)}>
 
@@ -174,7 +174,7 @@ const CreateProduct = () => {
                 <input
                 type="text"
                 value={quantity}
-                placeholder="wrtie a name"
+                placeholder="quantity"
                 className="form-control w-full p-3 border border-gray-50 bg-blue-50 rounded-lg"
                 onChange={(e)=> setQuantity(e.target.value)}>
 

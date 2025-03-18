@@ -42,7 +42,7 @@ const Products = () => {
             <h1 className="text-center text-4xl mb-6">All Product List</h1>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {products?.map((p) => (
-                <Link key={p._id} to={`/dashboard/admin/product/${p.slug}`}>
+                <Link key={p._id} to={`/dashboard/admin/update-product/${p.slug}`}>
                 <div className="max-w-sm rounded overflow-hidden shadow-lg border p-4 bg-white hover:shadow-xl transition">
                   <img
                     className="w-full h-48 object-cover"

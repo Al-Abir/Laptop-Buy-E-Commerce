@@ -15,15 +15,14 @@ router.post('/create-product',requireSignIn, isAdmin, formidable(),createProduct
 router.get('/get-product',getProductController)
 
 // get single product
-
 router.get('/get-product/:slug', getSingleProductController)
 
 //get photo
-router.get('/product-photo/:pid',productPhotoController)
+router.get('/product-photo/:pid', productPhotoController);
 
 //product delete
 router.delete('/product-delete/:pid',deleteController)
 // product update
-router.put('/update-product/:pid',requireSignIn, isAdmin, formidable(),updateProductController)
 
+router.put('/update-product/:pid', requireSignIn, isAdmin, formidable(), updateProductController);
 module.exports = router
