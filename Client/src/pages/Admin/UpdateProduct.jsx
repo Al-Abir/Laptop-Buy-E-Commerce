@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 const { Option } = Select;
+import Swal from "sweetalert2";  
 
 const UpdateProduct = () => {
   const [categories, setCategories] = useState([]);
@@ -104,6 +105,37 @@ const UpdateProduct = () => {
       toast.error("Something went wrong while updating the product.");
     }
   };
+
+  // handle delete
+  const handleDelete = async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await axios.delete(
+            `${import.meta.env.VITE_API_URL}/api/v1/product/product-delete/${id}`
+          );
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your product has been deleted.",
+            icon: "success",
+          });
+          navigate("/dashboard/admin/products");
+        } catch (error) {
+          console.log(error);
+          toast.error("Something went wrong");
+        }
+      }
+    });
+  };
+  
 
   return (
     <Layout>
@@ -238,13 +270,19 @@ const UpdateProduct = () => {
               </div>
 
               {/* Update Button */}
-              <div className="mb-3">
+              <div className="mb-3 flex gap-4">
                 <button
-                  className=" w-full px-4 py-2 border border-gray-500 text-gray-500 hover:bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer"
+                  className=" w-1/2 px-4 py-2 border border-gray-500 text-gray-500 hover:bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer"
                   onClick={handleUpdate}
                 >
                   UPDATE PRODUCT
                 </button>
+
+                <button className="w-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 cursor-pointer"
+                          onClick={handleDelete}
+                        >
+                      Delete Product
+                        </button>
               </div>
             </div>
           </div>
