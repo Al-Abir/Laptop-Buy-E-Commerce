@@ -76,7 +76,7 @@ const UpdateProduct = () => {
       productData.append("name", name);
       productData.append("description", description);
       productData.append("price", price);
-      productData.append("category", category);
+      productData.append("category", category?._id || category); 
       productData.append("quantity", quantity);
       productData.append("shipping", shipping ? "1" : "0"); // sending "1" or "0"
       if (photo) productData.append("photo", photo);
@@ -127,6 +127,7 @@ const UpdateProduct = () => {
                 onChange={(value) => {
                   setCategory(value);
                 }}
+                value={category ? category._id : undefined} 
             
        
               >
