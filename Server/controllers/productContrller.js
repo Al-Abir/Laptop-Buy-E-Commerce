@@ -1,7 +1,8 @@
 const productModel = require('../models/productModel')
 const fs = require('fs')
 const slugify = require('slugify')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { errorMonitor } = require('events');
 const createProductController = async (req, res) => {
     try {
       const { name, description, price, category, quantity, shipping } = req.fields;
@@ -202,4 +203,81 @@ const updateProductController = async (req, res) => {
     }
 };
 
-module.exports = { createProductController,getProductController, getSingleProductController,productPhotoController,deleteController,updateProductController };
+
+// product filter Controller
+
+const productFilterController = async(req, res) => {
+
+    try {
+        const {checked,radio} = req.body;
+         let args = {}
+         if(checked.length>0) args.category = checked
+         if(radio.length) args.price = {$gte: radio[0], $lte:radio[1]}
+         const products = await productModel.find(args);
+         res.status(200).send({
+            success:true,
+            products
+         })
+        
+    } catch (error) {
+      
+        res.status(400).send({
+            success:false,
+            message:"Error While filtering Products",
+            error
+        })
+    }
+
+}
+
+// product count
+const  productCountController = async (req, res)=>{
+     try {  
+        const total = await productModel.find({}).estimatedDocumentCount();
+        res.status(200).send({
+            success:true,
+            total,
+            
+        })
+        
+     } catch (error) {
+         console.log(error)     
+         res.status(400).send({
+            success:false,
+            error,
+            message:"Error in product count"
+         })
+        
+        }
+
+
+}
+
+const  productListController = async(req, res)=>{
+     try {
+        const perPage =1;
+        const page = req.params.page ? req.params.page:1
+        const products = await productModel
+        .find({})
+        .select("-photo")
+        .skip((page-1)*perPage)
+        .limit(perPage)
+        .sort({createdAt:-1})
+        res.status(200).send({
+            success:true,
+            products,
+        })
+        
+     } catch (error) {
+           res.status(400).send({
+            success:false,
+            message: 'error in per page ctrl'
+           })
+     }
+
+}
+
+
+module.exports = { createProductController,getProductController, 
+                  getSingleProductController,productPhotoController,
+                  deleteController,updateProductController,productFilterController, productCountController, productListController };
