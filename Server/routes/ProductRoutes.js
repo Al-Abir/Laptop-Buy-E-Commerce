@@ -4,7 +4,8 @@ const { createProductController, getProductController,
      getSingleProductController, productPhotoController, deleteController,
      updateProductController, productFilterController, 
      productCountController,
-     productListController} = require('../controllers/productContrller');
+     productListController,
+     searchProductController} = require('../controllers/productContrller');
 const formidable = require('express-formidable')
 
 
@@ -36,4 +37,8 @@ router.get('/product-count', productCountController)
 
 //product per page
 router.get('/product-list/:page', productListController)
+
+// search product
+router.get('/search/:keyword',searchProductController)
+
 module.exports = router

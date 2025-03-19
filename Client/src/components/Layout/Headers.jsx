@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink,Link, useNavigate } from "react-router-dom";
 import { GiShoppingCart } from "react-icons/gi";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useAuth } from "../../context/auth";
 import toast from "react-hot-toast";
+import SearchInput from "../Form/SearchInput";
+
 
 const Headers = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,10 +28,14 @@ const Headers = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex gap-3">
           <GiShoppingCart className="text-2xl" />
-          <h1 className="text-black text-xl font-bold uppercase tracking-wide">
-            Ecommerce App
-          </h1>
+          <Link to="/" className="text-black text-xl font-bold uppercase tracking-wide">
+                Ecommerce App
+            </Link>
         </div>
+         <div>
+            
+             <SearchInput></SearchInput>
+         </div>
 
         <div className="hidden md:flex space-x-6">
           {links.map((item) => (
