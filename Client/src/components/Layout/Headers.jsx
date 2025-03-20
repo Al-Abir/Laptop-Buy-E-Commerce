@@ -14,7 +14,7 @@ const Headers = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
-  const links = ["Home", "Category", "Cart"];
+  const links = ["Home", "Cart"];
 
   const handleLogout = () => {
     setAuth({ user: null, token: "" });
