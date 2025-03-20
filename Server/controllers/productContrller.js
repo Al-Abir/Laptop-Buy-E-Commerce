@@ -70,26 +70,35 @@ const getProductController = async(req,res) =>{
     }
 
 }
-
-const getSingleProductController = async(req, res)=>{
+const getSingleProductController = async (req, res) => {
     try {
-        const product = await productModel.findOne({slug:req.params.slug}).populate('category').select("-photo")
-        res.status(200).send({
-            success:true,
-            message:"Single product fetched",
+        const product = await productModel
+            .findOne({ slug: req.params.slug })
+            .populate('category', 'name') // Only populate 'name' from category
+            .select("-photo");
+
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: "Product not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Single product fetched successfully",
             product
-        })
-        
+        });
+
     } catch (error) {
-        console.error(error);
+        console.error(`Error fetching product with slug "${req.params.slug}":`, error.message);
         res.status(500).json({
             success: false,
             message: "Error while getting single product",
-            error
-        }); 
-        
+            error: error.message
+        });
     }
-}
+};
 
 // product photo controller
 const productPhotoController = async (req, res) => {
@@ -299,7 +308,31 @@ const searchProductController = async (req, res) => {
   };
   
 
+  // related product controller
+  const relatedProductController = async (req, res) => {
+    try {
+        const { pid, cid } = req.params;
+        const products = await productModel.find({
+            category: cid,
+            _id: { $ne: pid }
+        }).select('-photo').limit(3).populate('category');  
+
+        res.status(200).send({
+            success: true,
+            products
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(400).send({
+            success: false,
+            message: "Error while getting related product",
+            error
+        });
+    }
+};
+
+
 module.exports = { createProductController,getProductController, 
                   getSingleProductController,productPhotoController,
                   deleteController,updateProductController,productFilterController,
-                   productCountController, productListController,searchProductController };
+                   productCountController, productListController,searchProductController ,relatedProductController};

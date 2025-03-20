@@ -3,6 +3,7 @@ import Layout from "../components/Layout/Layout";
 import axios from "axios";
 import { Checkbox, Radio } from "antd";
 import { Price } from "../components/Price";
+import { useNavigate } from "react-router-dom";
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -13,7 +14,8 @@ const HomePage = () => {
   // pagination
   const[total,setTotal] = useState(0);
   const[page,setPage] = useState(1)
-
+  
+  const navigate = useNavigate();
 
   //get all catefgories
   const getAllCategory = async () => {
@@ -164,7 +166,7 @@ const HomePage = () => {
                     <p className="text-gray-700 text-sm">{p.description.substring(0,30)}</p>
                   </div>
                   <div className="flex gap-5">
-                         <button className="px-4 py-2  border bg-blue-500 text-white rounded-lg  ">More Details</button>
+                         <button className="px-4 py-2  border bg-blue-500 text-white rounded-lg  " onClick={()=> navigate(`/product/${p.slug}`)}>More Details</button>
                          <button className="px-4 py-3 border bg-slate-500 text-white rounded-lg">Add to cart</button>
                   </div>
                 </div>
