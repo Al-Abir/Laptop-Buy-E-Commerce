@@ -19,6 +19,7 @@ import Products from './pages/Admin/Products'
 import UpdateProduct from './pages/Admin/UpdateProduct'
 import Search from './pages/Search'
 import ProductDetails from './pages/ProductDetails'
+import CartPage from './pages/CartPage'
 function App() {
 
 
@@ -28,6 +29,7 @@ function App() {
         <Route path='/'element={<HomePage></HomePage>}></Route>
         <Route path='/product/:slug'element={<ProductDetails></ProductDetails>}></Route>
         <Route path='/search'element={<Search></Search>}></Route>
+        <Route path='/cart'element={<CartPage></CartPage>}></Route>
         <Route path="/dashboard" element={<PrivateRoute />}>
               <Route path='user'element={<Dashboard />}></Route>
               <Route path='user/profile'element={<Profile />}></Route>

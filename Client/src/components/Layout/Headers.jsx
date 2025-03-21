@@ -1,20 +1,18 @@
 import React, { useState } from "react";
-import { NavLink,Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { GiShoppingCart } from "react-icons/gi";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { useAuth } from "../../context/auth";
 import toast from "react-hot-toast";
 import SearchInput from "../Form/SearchInput";
-
+import { useCart } from "../../context/cart";
 
 const Headers = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartValue, setCartValue] = useState(0);
+  const [cart, setCart] = useCart([]); // Ensure you destructure setCart from useCart
   const [auth, setAuth] = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-
-  const links = ["Home", "Cart"];
 
   const handleLogout = () => {
     setAuth({ user: null, token: "" });
@@ -23,39 +21,36 @@ const Headers = () => {
     navigate("/login");
   };
 
+  // Function to add an item to the cart
+  const addToCart = (product) => {
+    setCart([...cart, product]); // Add the product to the cart array
+    toast.success("Item Added to Cart");
+  };
+
   return (
     <nav className="p-4 shadow-lg border-b-2 bg-white">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex gap-3">
           <GiShoppingCart className="text-2xl" />
           <Link to="/" className="text-black text-xl font-bold uppercase tracking-wide">
-                Ecommerce App
-            </Link>
+            Ecommerce App
+          </Link>
         </div>
-         <div>
-            
-             <SearchInput></SearchInput>
-         </div>
+
+        <SearchInput />
 
         <div className="hidden md:flex space-x-6">
-          {links.map((item) => (
-            <NavLink
-              key={item}
-              to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-              className="text-black hover:text-violet-700 hover:underline uppercase tracking-wide"
-            >
-              {item === "Cart" ? `Cart (${cartValue})` : item}
-            </NavLink>
-          ))}
+          <NavLink to="/" className="text-black hover:text-violet-700 hover:underline uppercase tracking-wide">
+            Home
+          </NavLink>
+          <NavLink to="/cart" className="text-black hover:text-violet-700 hover:underline uppercase tracking-wide">
+            Cart ({cart?.length})
+          </NavLink>
 
           {!auth?.user ? (
             <>
-              <NavLink to="/login" className="text-black hover:text-violet-700">
-                Login
-              </NavLink>
-              <NavLink to="/register" className="text-black hover:text-violet-700">
-                Register
-              </NavLink>
+              <NavLink to="/login" className="text-black hover:text-violet-700">Login</NavLink>
+              <NavLink to="/register" className="text-black hover:text-violet-700">Register</NavLink>
             </>
           ) : (
             <div className="relative">
@@ -70,17 +65,15 @@ const Headers = () => {
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-44 bg-white divide-y divide-gray-100 rounded-lg shadow-lg">
                   <ul className="py-2 text-sm text-gray-700">
-                    {auth?.user && (
-                      <li>
-                        <NavLink
-                          to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
-                          className="block px-4 py-2 hover:bg-gray-100"
-                          onClick={() => setDropdownOpen(false)}
-                        >
-                          Dashboard
-                        </NavLink>
-                      </li>
-                    )}
+                    <li>
+                      <NavLink
+                        to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
+                        className="block px-4 py-2 hover:bg-gray-100"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        Dashboard
+                      </NavLink>
+                    </li>
                     <li>
                       <button
                         onClick={handleLogout}
@@ -103,11 +96,8 @@ const Headers = () => {
 
       {isOpen && (
         <div className="md:hidden bg-blue-700 p-4 flex flex-col space-y-2 shadow-md">
-          {links.map((item) => (
-            <NavLink key={item} to={item === "Home" ? "/" : `/${item.toLowerCase()}`} className="text-white">
-              {item === "Cart" ? `Cart (${cartValue})` : item}
-            </NavLink>
-          ))}
+          <NavLink to="/" className="text-white">Home</NavLink>
+          <NavLink to="/cart" className="text-white">Cart ({cart?.length})</NavLink>
           {!auth?.user ? (
             <>
               <NavLink to="/login" className="text-white">Login</NavLink>
@@ -115,14 +105,9 @@ const Headers = () => {
             </>
           ) : (
             <>
-              {auth?.user && (
-                <NavLink
-                  to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
-                  className="text-white"
-                >
-                  Dashboard
-                </NavLink>
-              )}
+              <NavLink to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`} className="text-white">
+                Dashboard
+              </NavLink>
               <button onClick={handleLogout} className="text-white">Logout</button>
             </>
           )}
