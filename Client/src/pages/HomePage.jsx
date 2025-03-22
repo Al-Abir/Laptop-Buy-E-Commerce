@@ -190,6 +190,7 @@ const HomePage = () => {
                       onClick={() => {
                         console.log("Current Cart:", cart); // Debugging
                         setCart([...cart, p]); // Ensure cart is always an array
+                        localStorage.setItem('cart', JSON.stringify([...cart,p]))
                         toast.success("Item Added successfully");
                       }}
                     >

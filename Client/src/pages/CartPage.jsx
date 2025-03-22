@@ -6,8 +6,33 @@ import { useAuth } from "../context/auth";
 
 const CartPage = () => {
   const [auth] = useAuth();
-  const [cart] = useCart();
+  const [cart, setCart] = useCart();
   const navigate = useNavigate();
+
+  const totalPrice = () => {
+    try {
+      const total = cart?.reduce((sum, item) => sum + item.price, 0) || 0;
+      return total.toLocaleString("bn-BD", {
+        style: "currency",
+        currency: "BDT"
+      });
+    } catch (error) {
+      console.log(error);
+      return "৳0";
+    }
+  };
+  
+  
+  const removeItem = (pid) => {
+    try {
+      const updatedCart = cart.filter((item) => item._id !== pid);
+      setCart(updatedCart);
+      localStorage.setItem('cart',JSON.stringify(updatedCart))
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
 
   return (
     <Layout>
@@ -44,7 +69,7 @@ const CartPage = () => {
           <p className="text-lg font-semibold">{p.name}</p>
           <p className="text-gray-600 text-sm">{p.description.substring(0, 30)}...</p>
           <p className="text-gray-800 font-medium">Price: ৳{p.price}</p>
-          <button className="mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+          <button className="mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onClick={()=> removeItem(p._id)}>
             Remove
           </button>
         </div>
@@ -53,8 +78,13 @@ const CartPage = () => {
     </div>
 
   {/* Checkout Section */}
-  <div className="w-full md:w-1/3 p-4 bg-gray-100 shadow-md rounded-lg">
-    <h2 className="text-xl font-semibold text-center mb-4">Checkout | Payment</h2>
+  <div className="w-full md:w-1/3 p-4 bg-gray-100 shadow-md rounded-lg text-center">
+      <h2>Cart Summary</h2>
+      <hr />
+    <h2 className="text-xl font-semibold text-center mb-4"> Total| Checkout | Payment  </h2>
+     <hr />
+     <h4>Total  {totalPrice()}</h4>
+ 
     {/* Add checkout details or buttons here */}
   </div>
 </div>
