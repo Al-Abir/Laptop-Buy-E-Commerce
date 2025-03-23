@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { GiShoppingCart } from "react-icons/gi";
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -9,14 +9,31 @@ import { useCart } from "../../context/cart";
 
 const Headers = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [cart, setCart] = useCart([]); // Ensure you destructure setCart from useCart
   const [auth, setAuth] = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [cart, setCart] = useCart([]);
   const navigate = useNavigate();
+
+  // Load cart items from localStorage on page refresh
+  useEffect(() => {
+    const savedCart = JSON.parse(localStorage.getItem("cart"));
+    if (savedCart) {
+      setCart(savedCart);
+    }
+  }, []);
+
+  // Update localStorage whenever the cart changes
+  useEffect(() => {
+    if (cart.length > 0) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, [cart]);
 
   const handleLogout = () => {
     setAuth({ user: null, token: "" });
+    setCart([]); // Clear the cart on logout
     localStorage.removeItem("auth");
+    localStorage.removeItem("cart"); // Remove cart from localStorage
     toast.success("Logout Successfully");
     navigate("/login");
   };
