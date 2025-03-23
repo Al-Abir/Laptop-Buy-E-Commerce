@@ -95,10 +95,61 @@ const loginController = async(req,res) => {
 
 }
 
+const updateProfileController = async (req, res) => {
+    try {
+        const { name, email, password, address, phone } = req.body;
 
-const testController = (req, res)=>{
-   res.send("Protected Routes")
-}
+        // Find the user by ID from auth middleware
+        const user = await userModel.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Password validation
+        if (password && password.length < 6) {
+            return res.status(400).json({ error: "Password must be at least 6 characters long." });
+        }
+
+        // Check if email update is valid and unique
+        if (email && email !== user.email) {
+            const existingUser = await userModel.findOne({ email });
+            if (existingUser) {
+                return res.status(400).json({ error: "Email already in use." });
+            }
+        }
+
+        // Prepare update data
+        const updateData = {
+            name: name || user.name,
+            email: email || user.email,
+            phone: phone || user.phone,
+            address: address || user.address
+        };
+
+        // Hash new password if provided
+        if (password) {
+            updateData.password = await hashPassword(password);
+        }
+
+        // Update user in database
+        const updatedUser = await userModel.findByIdAndUpdate(req.user._id, updateData, { new: true });
+
+        return res.status(200).json({
+            success: true,
+            message: "Profile updated successfully",
+            updatedUser
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: "Error updating profile",
+            error: error.message
+        });
+    }
+};
 
 
-module.exports = { registerController, loginController,testController };
+
+module.exports = { registerController, loginController,updateProfileController };
