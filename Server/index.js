@@ -5,6 +5,7 @@ const connectDB = require('./confiq/db');
 const authRoutes = require('./routes/authRoute')
 const categoryRoutes  = require('./routes/CategoryRoutes')
 const ProductRoutes =  require('./routes/ProductRoutes')
+const Payment = require('./routes/Payment')
 const cors = require('cors')
 
 //confiqure env file
@@ -24,6 +25,7 @@ app.use(morgan('dev'))
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/category', categoryRoutes )
 app.use('/api/v1/product',ProductRoutes)
+app.use('api/v1/payment',Payment)
 
 //rest api
 app.get('/',(req, res)=>{
