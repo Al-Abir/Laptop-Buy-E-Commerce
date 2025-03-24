@@ -188,10 +188,17 @@ const HomePage = () => {
                     <button
                       className="px-4 py-3 border bg-slate-500 text-white rounded-lg"
                       onClick={() => {
-                        console.log("Current Cart:", cart); // Debugging
-                        setCart([...cart, p]); // Ensure cart is always an array
-                        localStorage.setItem('cart', JSON.stringify([...cart,p]))
+                        // console.log("Current Cart:", cart); 
+                        // setCart([...cart, p]); 
+                        // localStorage.setItem('cart', JSON.stringify([...cart,p]))
+                        // toast.success("Item Added successfully");
+                        setCart(prevCart => {
+                          const updatedCart = [...prevCart, p];
+                          localStorage.setItem('cart', JSON.stringify(updatedCart));
+                          return updatedCart;
+                        });
                         toast.success("Item Added successfully");
+                        
                       }}
                     >
                       Add to cart

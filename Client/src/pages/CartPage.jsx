@@ -13,20 +13,26 @@ const CartPage = () => {
     name: auth?.user?.name || "",
     address: auth?.user?.address || "",
     phone: "",
+    email: auth?.user?.email || "", // Email field added
   });
 
   const totalPrice = () => {
     try {
-      const total = cart && cart.length > 0 ? cart.reduce((sum, item) => sum + item.price, 0) : 0;
-      return total.toLocaleString("bn-BD", {
+      const total =
+        cart && cart.length > 0
+          ? cart.reduce((sum, item) => sum + item.price, 0)
+          : 0;
+      return total.toLocaleString("en-US", {
         style: "currency",
         currency: "BDT",
+        minimumFractionDigits: 2, // Ensures 2 decimal places
       });
     } catch (error) {
       console.log(error);
-      return "৳0";
+      return "৳0.00";
     }
   };
+  
 
   const removeItem = (pid) => {
     try {
@@ -40,16 +46,14 @@ const CartPage = () => {
     }
   };
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!auth?.token) {
       navigate("/login", { state: "/cart" });
       return;
     }
-  
+
     try {
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/payment/init`,
@@ -57,25 +61,28 @@ const CartPage = () => {
           name: checkoutData.name,
           address: checkoutData.address,
           phone: checkoutData.phone,
-          amount: cart.reduce((sum, item) => sum + item.price, 0),
-          cart,
+          email: checkoutData.email, // Ensure this field is correctly populated
+          cart, // Send only cart, backend will calculate amount
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.token}`,
+            Authorization: `${auth.token}`,
           },
         }
       );
-  
-      if (data?.redirectUrl) {
-        window.location.href = data.redirectUrl;
+
+      if (data?.url) {
+          window.location.replace(data.url)
+      } else {
+        console.error("Payment Gateway URL missing", data);
       }
+
     } catch (error) {
       console.error("Payment initiation error:", error);
     }
   };
-  
+
 
   return (
     <Layout>
@@ -96,17 +103,24 @@ const CartPage = () => {
           {/* Cart Items */}
           <div className="w-full md:w-2/3 p-4">
             {cart?.map((p) => (
-              <div key={p._id} className="flex items-center bg-white shadow-md rounded-lg p-4 mb-4">
+              <div
+                key={p._id}
+                className="flex items-center bg-white shadow-md rounded-lg p-4 mb-4"
+              >
                 <div className="w-1/3">
                   <img
-                    src={`${import.meta.env.VITE_API_URL}/api/v1/product/product-photo/${p._id}`}
+                    src={`${
+                      import.meta.env.VITE_API_URL
+                    }/api/v1/product/product-photo/${p._id}`}
                     className="w-24 h-24 object-cover rounded"
                     alt={p.name}
                   />
                 </div>
                 <div className="w-2/3 pl-4">
                   <p className="text-lg font-semibold">{p.name}</p>
-                  <p className="text-gray-600 text-sm">{p.description.substring(0, 30)}...</p>
+                  <p className="text-gray-600 text-sm">
+                    {p.description.substring(0, 30)}...
+                  </p>
                   <p className="text-gray-800 font-medium">Price: ৳{p.price}</p>
                   <button
                     className="mt-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
@@ -132,26 +146,49 @@ const CartPage = () => {
                   className="w-full p-2 border rounded mb-2"
                   placeholder="Name"
                   value={checkoutData.name}
-                  onChange={(e) => setCheckoutData({ ...checkoutData, name: e.target.value })}
-                  required
+                  onChange={(e) =>
+                    setCheckoutData({ ...checkoutData, name: e.target.value })
+                  }
+               
                 />
                 <input
                   type="text"
                   className="w-full p-2 border rounded mb-2"
                   placeholder="Address"
                   value={checkoutData.address}
-                  onChange={(e) => setCheckoutData({ ...checkoutData, address: e.target.value })}
-                  required
+                  onChange={(e) =>
+                    setCheckoutData({
+                      ...checkoutData,
+                      address: e.target.value,
+                    })
+                  }
+                 
                 />
                 <input
                   type="text"
                   className="w-full p-2 border rounded mb-2"
                   placeholder="Phone"
                   value={checkoutData.phone}
-                  onChange={(e) => setCheckoutData({ ...checkoutData, phone: e.target.value })}
-                  required
+                  onChange={(e) =>
+                    setCheckoutData({ ...checkoutData, phone: e.target.value })
+                  }
+               
                 />
-                <button type="submit" className="w-full px-4 py-2 bg-green-500 text-white rounded-lg mt-4">
+                <input
+                  type="email"
+                  className="w-full p-2 border rounded mb-2"
+                  placeholder="Email"
+                  value={checkoutData.email}
+                  onChange={(e) =>
+                    setCheckoutData({ ...checkoutData, email: e.target.value })
+                  }
+                  
+                />
+
+                <button
+                  type="submit"
+                  className="w-full px-4 py-2 bg-green-500 text-white rounded-lg mt-4"
+                >
                   Place Order
                 </button>
               </form>
