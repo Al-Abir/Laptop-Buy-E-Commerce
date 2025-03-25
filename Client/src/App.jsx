@@ -22,6 +22,7 @@ import ProductDetails from './pages/ProductDetails'
 import CartPage from './pages/CartPage'
 import PaymentSuccess from './pages/Payment/PaymentSuccess'
 import PaymentFail from './pages/Payment/PaymentFail'
+import AdminOrder from './pages/Admin/AdminOrder'
 function App() {
 
 
@@ -47,6 +48,7 @@ function App() {
               <Route path='admin/products'element={<Products></Products>}></Route>
               <Route path="admin/update-product/:slug" element={<UpdateProduct />} />
               <Route path='admin/users'element={<Users></Users>}></Route>
+              <Route path='admin/orders'element={<AdminOrder></AdminOrder>}></Route>
         </Route>
         <Route path='/register'element={<Register></Register>}></Route>
         <Route path='/login'element={<Login></Login>}></Route>

@@ -157,7 +157,7 @@ const updateProfileController = async (req, res) => {
 
 const getOrdersController = async (req, res) => {
       try {
-        const orders = await orderModel.find({buyer:req.user._id}).populate("products").populate("buyer","name")
+        const orders = await orderModel.find({buyer:req.user._id}).populate("products","-photo").populate("buyer","name")
         res.status(200).send({
             success:true,
             orders
@@ -174,5 +174,54 @@ const getOrdersController = async (req, res) => {
 
       }
 };
+const getAllOrdersController = async (req, res) => { 
+    try {
+        console.log("Starting to fetch orders..."); // Add this
+        const allorders = await orderModel
+            .find({})
+            .populate("products", "-photo")
+            .populate("buyer", "name")
+            
+        console.log("Orders fetched successfully:", allorders.length); // Add this
+        
+        res.status(200).send({
+            success: true,
+            allorders
+        });
+    } catch (error) {
+        console.log("Full error:", error); // Enhanced logging
+        res.status(500).send({
+            success: false,
+            message: "Error while getting orders",
+            error: error.message, // Send only the message to client
+        });
+    }
+};
 
-module.exports = { registerController, loginController,updateProfileController, getOrdersController };
+//oder status
+const orderStatusController = async(req,res) =>{
+        try {
+            const{oderId} = req.params;
+            const{status} = req.body;
+            const updateorders = await orderModel.findByIdAndUpdate(
+                oderId,
+                {status},
+                {new:true}
+            )
+            res.status(200).send({
+                success:true,
+                updateorders
+
+            })
+            
+        } catch (error) {
+           console.log(error)  
+           res.status(500).send({
+            success:false,
+            message:"Error while updateing order"
+           })
+        }
+}
+
+
+module.exports = { registerController, loginController,updateProfileController, getOrdersController,getAllOrdersController ,orderStatusController};
