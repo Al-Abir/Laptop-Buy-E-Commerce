@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 
-router.post('/init',paymentController);
+router.post('/init',requireSignIn ,paymentController);
 
  router.post('/success/:tranId',paymentSuccessController);
  router.post('/fail/:tranId', paymentFail);

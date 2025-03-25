@@ -1,4 +1,6 @@
 const userModel = require('../models/userModel');
+const orderModel = require('../models/oderModel');
+const productModel = require("../models/productModel")
 const { hashPassword, comparePassword } = require('../helpers/authHelper');
 const { route } = require('../routes/authRoute');
 const JWT = require('jsonwebtoken')
@@ -151,5 +153,26 @@ const updateProfileController = async (req, res) => {
 };
 
 
+//orders
 
-module.exports = { registerController, loginController,updateProfileController };
+const getOrdersController = async (req, res) => {
+      try {
+        const orders = await orderModel.find({buyer:req.user._id}).populate("products").populate("buyer","name")
+        res.status(200).send({
+            success:true,
+            orders
+        })
+
+        
+      } catch (error) {
+           console.log(error)
+           res.status(500).send({
+            success:false,
+            message:"Error while geting orders",
+            error
+           })
+
+      }
+};
+
+module.exports = { registerController, loginController,updateProfileController, getOrdersController };

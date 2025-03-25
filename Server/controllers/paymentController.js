@@ -7,7 +7,15 @@ const paymentController = async (req, res) => {
 
     // Create an order document
     const order = new Order({
-        products: cart.map(item => item.productId),  // Assuming cart contains product IDs
+        products: cart.map(item => ({
+            productId: item.productId,  // Keep reference (optional)
+            name: item.name,
+            slug: item.slug,
+            description: item.description,
+            price: item.price,
+            quantity: item.quantity,
+            shipping: item.shipping,
+        })),
         payment: {
             amount: totalAmount,
             currency: 'BDT',
@@ -15,6 +23,7 @@ const paymentController = async (req, res) => {
             transactionId: `tran_id_${Date.now()}`,
             date: new Date(),
         },
+        buyer:req.user._id,
         customer: {
             name,
             email,
@@ -22,6 +31,7 @@ const paymentController = async (req, res) => {
             address,
         },
         status: 'Not Process',
+        paidStatus:false,
         transactionId: `tran_id_${Date.now()}`,
     });
 
@@ -89,7 +99,6 @@ const paymentSuccessController = async (req, res) => {
 
         // Update order status
         order.paidStatus = true;
-        order.status = "Processing";
         await order.save();
 
         //res.json({ message: "Payment Successful", order });
