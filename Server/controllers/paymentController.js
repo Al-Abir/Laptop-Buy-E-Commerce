@@ -34,7 +34,7 @@ const paymentController = async (req, res) => {
             currency: 'BDT',
             tran_id: order.transactionId,
             success_url: `${process.env.SERVER_URL}/api/v1/payment/success/tran_id_${order.transactionId}`,
-            fail_url: `${process.env.SERVER_URL}/api/v1/payment/fail`,
+            fail_url: `${process.env.SERVER_URL}/api/v1/payment/fail/tran_id_${order.transactionId}`,
             cancel_url: `${process.env.SERVER_URL}/api/v1/payment/cancel`,
             ipn_url: `${process.env.SERVER_URL}/api/v1/payment/ipn`,
             shipping_method: 'Courier',
@@ -92,18 +92,36 @@ const paymentSuccessController = async (req, res) => {
         order.status = "Processing";
         await order.save();
 
-        res.json({ message: "Payment Successful", order });
+        //res.json({ message: "Payment Successful", order });
+        res.redirect(`${process.env.CLIENT_URL}/payment/success`)
+
+
     } catch (error) {
         console.error("Payment Success Error:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
-const paymentFail = () =>{
+const paymentFail = async (req, res) => {
+    try {
+        const { tranId } = req.params;
 
-}
+        // Delete order by transaction ID (assuming stored as "tran_id_<timestamp>")
+        const extractedTranId = tranId.replace("tran_id_", "");
+
+        await Order.findOneAndDelete({ transactionId: extractedTranId });
+
+        console.log("Order deletion successful due to payment failure.");
+        res.redirect(`${process.env.CLIENT_URL}/payment/fail`);
+    } catch (error) {
+        console.error("Payment Fail Error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
 
 const paymentCancel = () =>{
+
+
 
 }
 

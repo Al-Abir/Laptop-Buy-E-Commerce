@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/init',paymentController);
 
  router.post('/success/:tranId',paymentSuccessController);
- router.post('/fail', paymentFail);
+ router.post('/fail/:tranId', paymentFail);
  router.post('/cancel',paymentCancel);
  router.post('/ipn', paymentIPN);
 
