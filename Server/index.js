@@ -33,8 +33,14 @@ const limiter = rateLimit({
 // Middlewares
 app.use(helmet())
 app.use(limiter); 
-app.use(cors());
+
 app.use(express.json());
+
+app.use(cors({
+  origin: process.env.FRONTEND_URL ,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(mongoSanitize()); 
 app.use(xss());
 app.use(hpp());  

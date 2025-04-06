@@ -101,11 +101,11 @@ const getSingleProductController = async (req, res) => {
 };
 
 // product photo controller
+
 const productPhotoController = async (req, res) => {
     try {
         const { pid } = req.params;
 
-        // Validate ID format before conversion
         if (!mongoose.Types.ObjectId.isValid(pid)) {
             return res.status(400).json({
                 success: false,
@@ -114,7 +114,6 @@ const productPhotoController = async (req, res) => {
         }
 
         const productId = new mongoose.Types.ObjectId(pid);
-
         const product = await productModel.findById(productId).select("photo");
 
         if (!product) {
@@ -131,6 +130,8 @@ const productPhotoController = async (req, res) => {
             });
         }
 
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
         res.set("Content-Type", product.photo.contentType);
         return res.status(200).send(product.photo.data);
 
@@ -143,8 +144,9 @@ const productPhotoController = async (req, res) => {
         });
     }
 };
-//delete Controller
 
+
+//delete
 const deleteController =  async(req,res)=>{
     try {
         await productModel.findByIdAndDelete(req.params.pid).select("-photo")

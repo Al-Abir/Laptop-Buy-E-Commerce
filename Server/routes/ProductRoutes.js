@@ -46,7 +46,4 @@ router.get('/search/:keyword',searchProductController)
 router.get('/related-product/:pid/:cid', relatedProductController)
 
 
-
-
-
 module.exports = router
