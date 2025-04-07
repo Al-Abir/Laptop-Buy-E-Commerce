@@ -39,6 +39,7 @@ app.use(express.json());
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL,
+    "https://laptop-buy-e-commerce-wp2i.vercel.app"
     
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
