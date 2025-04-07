@@ -37,10 +37,14 @@ app.use(limiter);
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL ,
+  origin: [
+    process.env.FRONTEND_URL,
+    "https://laptop-buy-e-commerce.vercel.app"
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 app.use(mongoSanitize()); 
 app.use(xss());
 app.use(hpp());  
