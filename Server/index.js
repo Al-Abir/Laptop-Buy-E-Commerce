@@ -53,10 +53,15 @@ app.use('/api/v1/payment', Payment);
 
 // Default route
 app.get('/', (req, res) => {
-  res.send("<h1>Welcome to ecommerce app Hi</h1>");
+  res.send({
+      activeStatis:true,
+      error:false
+      
+      
+  });
 });
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8070;
 app.listen(PORT, () => {
   
 });
