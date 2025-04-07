@@ -54,7 +54,7 @@ app.use('/api/v1/payment', Payment);
 // Default route
 app.get('/', (req, res) => {
   res.send({
-      activeStatis:true,
+      activeStatus:true,
       error:false
       
       
