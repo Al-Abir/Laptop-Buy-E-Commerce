@@ -41,3 +41,9 @@ This project is a fully-featured online e-commerce website where users can brows
 - 💰 Discount & Offer Management
 
 ---
+## Design
+
+### Home Page
+<div style="text-align: center;">
+  <img src="https://ibb.co.com/Lh06zZ7M" alt="Image" style="width: 100%;" />
+</div>
