@@ -155,7 +155,7 @@ const HomePage = () => {
         {/* Main Content: Products */}
         <div className="md:w-3/4 w-full p-4">
           <h1 className="text-start text-xl font-bold">All Products</h1>
-          {JSON.stringify(radio, null, 4)}
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-5">
             {products.length > 0 ? (
               products.map((p) => (
