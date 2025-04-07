@@ -28,11 +28,10 @@ const CartPage = () => {
         minimumFractionDigits: 2, // Ensures 2 decimal places
       });
     } catch (error) {
-      console.log(error);
+      //(error);
       return "৳0.00";
     }
   };
-  
 
   const removeItem = (pid) => {
     try {
@@ -42,7 +41,7 @@ const CartPage = () => {
         return updatedCart;
       });
     } catch (error) {
-      console.log(error);
+      //(error);
     }
   };
 
@@ -73,16 +72,14 @@ const CartPage = () => {
       );
 
       if (data?.url) {
-          window.location.replace(data.url)
+        window.location.replace(data.url);
       } else {
         console.error("Payment Gateway URL missing", data);
       }
-
     } catch (error) {
       console.error("Payment initiation error:", error);
     }
   };
-
 
   return (
     <Layout>
@@ -149,7 +146,6 @@ const CartPage = () => {
                   onChange={(e) =>
                     setCheckoutData({ ...checkoutData, name: e.target.value })
                   }
-               
                 />
                 <input
                   type="text"
@@ -162,7 +158,6 @@ const CartPage = () => {
                       address: e.target.value,
                     })
                   }
-                 
                 />
                 <input
                   type="text"
@@ -172,7 +167,6 @@ const CartPage = () => {
                   onChange={(e) =>
                     setCheckoutData({ ...checkoutData, phone: e.target.value })
                   }
-               
                 />
                 <input
                   type="email"
@@ -182,7 +176,6 @@ const CartPage = () => {
                   onChange={(e) =>
                     setCheckoutData({ ...checkoutData, email: e.target.value })
                   }
-                  
                 />
 
                 <button

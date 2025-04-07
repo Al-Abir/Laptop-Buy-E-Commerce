@@ -40,7 +40,7 @@ const createProductController = async (req, res) => {
         product,
       });
     } catch (error) {
-      console.error(error);
+     
       res.status(500).json({
         success: false,
         message: "Error creating product",
@@ -61,7 +61,7 @@ const getProductController = async(req,res) =>{
         });
         
     } catch (error) {
-        console.error(error);
+      
         res.status(500).json({
             success: false,
             message: "Error creating product",
@@ -91,7 +91,7 @@ const getSingleProductController = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(`Error fetching product with slug "${req.params.slug}":`, error.message);
+        // console.error(`Error fetching product with slug "${req.params.slug}":`, error.message);
         res.status(500).json({
             success: false,
             message: "Error while getting single product",
@@ -136,7 +136,7 @@ const productPhotoController = async (req, res) => {
         return res.status(200).send(product.photo.data);
 
     } catch (error) {
-        console.error("Error fetching product photo:", error);
+        //console.error("Error fetching product photo:", error);
         res.status(500).json({
             success: false,
             message: "Error while getting product photo",
@@ -182,7 +182,7 @@ const updateProductController = async (req, res) => {
 
         // Update product
         const product = await productModel.findByIdAndUpdate(
-            req.params.pid, // Ensure this matches the route parameter
+            req.params.pid, 
             { ...req.fields, slug: slugify(name) },
             { new: true }
           );
@@ -205,7 +205,7 @@ const updateProductController = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
+       
         res.status(500).json({
             success: false,
             message: "Error updating product",
@@ -252,7 +252,7 @@ const  productCountController = async (req, res)=>{
         })
         
      } catch (error) {
-         console.log(error)     
+         
          res.status(400).send({
             success:false,
             error,
@@ -300,7 +300,7 @@ const searchProductController = async (req, res) => {
       }).select("-photo");
       res.json(results);
     } catch (error) {
-      console.log(error);
+     
       res.status(400).send({
         success: false,
         message: "Error in Search Product API",
@@ -324,7 +324,6 @@ const searchProductController = async (req, res) => {
             products
         });
     } catch (error) {
-        console.log(error);
         res.status(400).send({
             success: false,
             message: "Error while getting related product",

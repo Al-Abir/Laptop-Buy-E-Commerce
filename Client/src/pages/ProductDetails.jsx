@@ -19,12 +19,14 @@ const ProductDetails = () => {
   const getProduct = async () => {
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/v1/product/get-product/${params.slug}`
+        `${import.meta.env.VITE_API_URL}/api/v1/product/get-product/${
+          params.slug
+        }`
       );
       setProduct(data?.product);
       getSimilarProduct(data?.product?._id, data?.product?.category?._id);
     } catch (error) {
-      console.log(error);
+      //(error);
     }
   };
 
@@ -32,11 +34,13 @@ const ProductDetails = () => {
   const getSimilarProduct = async (pid, cid) => {
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/v1/product/related-product/${pid}/${cid}`
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/v1/product/related-product/${pid}/${cid}`
       );
       setRelatedProducts(data?.products);
     } catch (error) {
-      console.log(error);
+      //(error);
     }
   };
 
@@ -59,7 +63,9 @@ const ProductDetails = () => {
             <div className="relative">
               <img
                 className="w-full h-80 object-cover rounded-xl shadow-md"
-                src={`${import.meta.env.VITE_API_URL}/api/v1/product/product-photo/${product._id}`}
+                src={`${
+                  import.meta.env.VITE_API_URL
+                }/api/v1/product/product-photo/${product._id}`}
                 alt={product.name}
               />
               <div className="absolute top-2 left-2 bg-blue-500 text-white px-3 py-1 text-sm rounded-md">
@@ -70,20 +76,24 @@ const ProductDetails = () => {
 
           {/* Product Details Section */}
           <div className="w-full md:w-1/2 p-6 space-y-4">
-            <h1 className="text-3xl font-bold text-gray-800 text-center mb-4">Product Details</h1>
+            <h1 className="text-3xl font-bold text-gray-800 text-center mb-4">
+              Product Details
+            </h1>
 
             <div className="space-y-2">
               <h4 className="text-lg font-semibold text-gray-700">
                 <span className="text-blue-500">Name:</span> {product.name}
               </h4>
               <h6 className="text-gray-600">
-                <span className="text-blue-500">Description:</span> {product.description}
+                <span className="text-blue-500">Description:</span>{" "}
+                {product.description}
               </h6>
               <h6 className="text-gray-600">
                 <span className="text-blue-500">Price:</span> ৳{product.price}
               </h6>
               <h2 className="text-lg font-medium text-gray-700">
-                <span className="text-blue-500">Category:</span> {product?.category?.name}
+                <span className="text-blue-500">Category:</span>{" "}
+                {product?.category?.name}
               </h2>
             </div>
 
@@ -101,9 +111,14 @@ const ProductDetails = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {relatedProducts.length > 0 ? (
               relatedProducts.map((product) => (
-                <div key={product._id} className="border p-4 rounded-lg shadow-sm">
+                <div
+                  key={product._id}
+                  className="border p-4 rounded-lg shadow-sm"
+                >
                   <img
-                    src={`${import.meta.env.VITE_API_URL}/api/v1/product/product-photo/${product._id}`}
+                    src={`${
+                      import.meta.env.VITE_API_URL
+                    }/api/v1/product/product-photo/${product._id}`}
                     alt={product.name}
                     className="w-full h-40 object-cover rounded-md"
                   />
@@ -114,7 +129,10 @@ const ProductDetails = () => {
                     onClick={() => {
                       setCart((prevCart) => {
                         const updatedCart = [...prevCart, product];
-                        localStorage.setItem("cart", JSON.stringify(updatedCart));
+                        localStorage.setItem(
+                          "cart",
+                          JSON.stringify(updatedCart)
+                        );
                         toast.success("Item Added to Cart successfully");
                         return updatedCart;
                       });

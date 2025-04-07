@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 const { Option } = Select;
-import Swal from "sweetalert2";  
+import Swal from "sweetalert2";
 
 const UpdateProduct = () => {
   const [categories, setCategories] = useState([]);
@@ -25,7 +25,9 @@ const UpdateProduct = () => {
   const getSingleProduct = async () => {
     try {
       const { data } = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/v1/product/get-product/${params.slug}`
+        `${import.meta.env.VITE_API_URL}/api/v1/product/get-product/${
+          params.slug
+        }`
       );
       setName(data.product?.name);
       setId(data.product._id);
@@ -35,7 +37,7 @@ const UpdateProduct = () => {
       setCategory(data.product.category);
       setShipping(data.product.shipping);
     } catch (error) {
-      console.log(error);
+      //(error);
     }
   };
 
@@ -58,7 +60,7 @@ const UpdateProduct = () => {
         setCategories(data.categories);
       }
     } catch (error) {
-      console.log(error);
+      //(error);
       toast.error("Something went wrong in getting categories");
     }
   };
@@ -77,7 +79,7 @@ const UpdateProduct = () => {
       productData.append("name", name);
       productData.append("description", description);
       productData.append("price", price);
-      productData.append("category", category?._id || category); 
+      productData.append("category", category?._id || category);
       productData.append("quantity", quantity);
       productData.append("shipping", shipping ? "1" : "0"); // sending "1" or "0"
       if (photo) productData.append("photo", photo);
@@ -101,7 +103,7 @@ const UpdateProduct = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error.response ? error.response.data : error.message);
+      //(error.response ? error.response.data : error.message);
       toast.error("Something went wrong while updating the product.");
     }
   };
@@ -115,12 +117,14 @@ const UpdateProduct = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
           const { data } = await axios.delete(
-            `${import.meta.env.VITE_API_URL}/api/v1/product/product-delete/${id}`
+            `${
+              import.meta.env.VITE_API_URL
+            }/api/v1/product/product-delete/${id}`
           );
           Swal.fire({
             title: "Deleted!",
@@ -129,13 +133,12 @@ const UpdateProduct = () => {
           });
           navigate("/dashboard/admin/products");
         } catch (error) {
-          console.log(error);
+          //(error);
           toast.error("Something went wrong");
         }
       }
     });
   };
-  
 
   return (
     <Layout>
@@ -148,7 +151,9 @@ const UpdateProduct = () => {
           {/* Main Content */}
           <div className="w-3/4 mt-3">
             <h2>Update Product</h2>
-            <div className="w-[700px] m-1"> {/* Adjusted width */}
+            <div className="w-[700px] m-1">
+              {" "}
+              {/* Adjusted width */}
               {/* Category Select */}
               <Select
                 bordered={true}
@@ -159,9 +164,7 @@ const UpdateProduct = () => {
                 onChange={(value) => {
                   setCategory(value);
                 }}
-                value={category ? category._id : undefined} 
-            
-       
+                value={category ? category._id : undefined}
               >
                 {categories?.map((c) => (
                   <Option key={c._id} value={c._id}>
@@ -169,7 +172,6 @@ const UpdateProduct = () => {
                   </Option>
                 ))}
               </Select>
-
               {/* Photo Upload */}
               <div className="mt-5 w-[700px] ">
                 <label className="px-4 py-2 border border-gray-500 text-gray-500 hover:bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer">
@@ -206,7 +208,6 @@ const UpdateProduct = () => {
                   </div>
                 )}
               </div>
-
               {/* Name Input */}
               <div className="mt-5 ">
                 <input
@@ -217,7 +218,6 @@ const UpdateProduct = () => {
                   onChange={(e) => setName(e.target.value)}
                 ></input>
               </div>
-
               {/* Description Input */}
               <div className="mt-5 ">
                 <textarea
@@ -228,7 +228,6 @@ const UpdateProduct = () => {
                   onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
               </div>
-
               {/* Price Input */}
               <div className="mt-5 ">
                 <input
@@ -239,7 +238,6 @@ const UpdateProduct = () => {
                   onChange={(e) => setPrice(e.target.value)}
                 ></input>
               </div>
-
               {/* Quantity Input */}
               <div className="mt-5 ">
                 <input
@@ -250,7 +248,6 @@ const UpdateProduct = () => {
                   onChange={(e) => setQuantity(e.target.value)}
                 ></input>
               </div>
-
               {/* Shipping Select */}
               <div className="mt-5 ">
                 <Select
@@ -268,7 +265,6 @@ const UpdateProduct = () => {
                   <Option value="1">Yes</Option>
                 </Select>
               </div>
-
               {/* Update Button */}
               <div className="mb-3 flex gap-4">
                 <button
@@ -278,11 +274,12 @@ const UpdateProduct = () => {
                   UPDATE PRODUCT
                 </button>
 
-                <button className="w-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 cursor-pointer"
-                          onClick={handleDelete}
-                        >
-                      Delete Product
-                        </button>
+                <button
+                  className="w-1/2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 cursor-pointer"
+                  onClick={handleDelete}
+                >
+                  Delete Product
+                </button>
               </div>
             </div>
           </div>

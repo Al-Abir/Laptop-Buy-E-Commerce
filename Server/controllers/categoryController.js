@@ -25,7 +25,7 @@ const  createCategoryController = async(req, res) =>{
        })
          
      } catch (error) {
-        console.log(error)
+        //(error)
         res.status(500).send({
             success: false,
             error,
@@ -50,7 +50,7 @@ const updateCategoryController = async (req ,res)=>{
    })
       
    } catch (error) {
-      console.log(error)
+      //(error)
       res.status(500).send({
          success:false,
          message:"Error while updating category",
@@ -69,7 +69,7 @@ const categoryAllController = async (req, res)=>{
          categories
       })
     } catch (error) {
-      console.log(error)
+      //(error)
       res.status(500).send({
          success:false,
          error,
@@ -93,7 +93,7 @@ const singleCategoryController = async(req, res) =>{
 
       
     } catch (error) {
-      console.log(error)
+      //(error)
       res.status(500).send({
          success:false,
          error,
@@ -123,7 +123,7 @@ const deleteCategoryController = async (req, res) => {
       });
 
    } catch (error) {
-      console.log(error);
+      //(error);
       res.status(500).send({
          success: false,
          error,

@@ -33,7 +33,7 @@ const CreateProduct = () => {
         setCategories(data.categories);
       }
     } catch (error) {
-      console.log(error);
+      //(error);
       toast.error("Something went wrong in getting categories");
     }
   };
@@ -44,7 +44,7 @@ const CreateProduct = () => {
   // create handle function
   const handleCreate = async (e) => {
     e.preventDefault();
-  
+
     try {
       // Create form data
       const productData = new FormData();
@@ -54,10 +54,9 @@ const CreateProduct = () => {
       productData.append("category", category);
       productData.append("quantity", quantity);
       productData.append("shipping", shipping);
-    
-      photo &&  productData.append("photo", photo);
-      
-  
+
+      photo && productData.append("photo", photo);
+
       // API call
       const { data } = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/product/create-product`,
@@ -69,7 +68,7 @@ const CreateProduct = () => {
           },
         }
       );
-  
+
       if (data.success) {
         toast.success("Product Created Successfully!");
         navigate("/dashboard/admin/products");
@@ -77,11 +76,11 @@ const CreateProduct = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
+      //(error);
       toast.error("Something went wrong while creating the product.");
     }
   };
-  
+
   return (
     <Layout>
       <div className="container mx-auto p-4">
@@ -138,77 +137,66 @@ const CreateProduct = () => {
               </div>
               <div className="mt-5 ">
                 <input
-                type="text"
-                value={name}
-                placeholder="wrtie a name"
-                className="form-control w-full p-3 border border-gray-50 bg-blue-50 rounded-lg"
-                onChange={(e)=> setName(e.target.value)}>
-
-                </input>
-
+                  type="text"
+                  value={name}
+                  placeholder="wrtie a name"
+                  className="form-control w-full p-3 border border-gray-50 bg-blue-50 rounded-lg"
+                  onChange={(e) => setName(e.target.value)}
+                ></input>
               </div>
-
               <div className="mt-5 ">
                 <textarea
-                type="text"
-                value={description}
-                placeholder="wrtie a descprition"
-                className="form-control w-full p-3 border border-gray-50 bg-blue-50 rounded-lg"
-                onChange={(e)=> setDescription(e.target.value)}>
-
-                </textarea>
-
+                  type="text"
+                  value={description}
+                  placeholder="wrtie a descprition"
+                  className="form-control w-full p-3 border border-gray-50 bg-blue-50 rounded-lg"
+                  onChange={(e) => setDescription(e.target.value)}
+                ></textarea>
               </div>
               <div className="mt-5 ">
                 <input
-                type="text"
-                value={price}
-                placeholder="price"
-                className="form-control w-full p-3 border border-gray-50 bg-blue-50 rounded-lg"
-                onChange={(e)=> setPrice(e.target.value)}>
-
-                </input>
-
+                  type="text"
+                  value={price}
+                  placeholder="price"
+                  className="form-control w-full p-3 border border-gray-50 bg-blue-50 rounded-lg"
+                  onChange={(e) => setPrice(e.target.value)}
+                ></input>
               </div>
               <div className="mt-5 ">
                 <input
-                type="text"
-                value={quantity}
-                placeholder="quantity"
-                className="form-control w-full p-3 border border-gray-50 bg-blue-50 rounded-lg"
-                onChange={(e)=> setQuantity(e.target.value)}>
-
-                </input>
-
+                  type="text"
+                  value={quantity}
+                  placeholder="quantity"
+                  className="form-control w-full p-3 border border-gray-50 bg-blue-50 rounded-lg"
+                  onChange={(e) => setQuantity(e.target.value)}
+                ></input>
               </div>
               <div className="mt-5 ">
-              <Select
-                bordered={true}
-                placeholder="Select a Shipping"
-                size="large"
-                showSearch
-                className="w-full h-12 text-lg mb-3" // Tailwind classes for width, height, and font size
-                onChange={(value) => {
-                  setShipping(value);
-                }}
-              >
-                  <Option value="0">
-                        No
-                  </Option> <Option value="1">
-                        Yes
-                  </Option>
-              </Select>
+                <Select
+                  bordered={true}
+                  placeholder="Select a Shipping"
+                  size="large"
+                  showSearch
+                  className="w-full h-12 text-lg mb-3" // Tailwind classes for width, height, and font size
+                  onChange={(value) => {
+                    setShipping(value);
+                  }}
+                >
+                  <Option value="0">No</Option> <Option value="1">Yes</Option>
+                </Select>
               </div>
               <div className="mb-3">
-                 <button className=" w-full px-4 py-2 border border-gray-500 text-gray-500 hover:bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer"
-                 onClick={handleCreate}> CREATE PRODUCT</button>
+                <button
+                  className=" w-full px-4 py-2 border border-gray-500 text-gray-500 hover:bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 cursor-pointer"
+                  onClick={handleCreate}
+                >
+                  {" "}
+                  CREATE PRODUCT
+                </button>
               </div>
             </div>
           </div>
-        
-        
         </div>
-
       </div>
     </Layout>
   );

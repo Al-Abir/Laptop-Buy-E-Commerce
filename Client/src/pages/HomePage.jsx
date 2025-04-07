@@ -30,7 +30,7 @@ const HomePage = () => {
         setCategories(data.categories);
       }
     } catch (error) {
-      console.log(error);
+      //(error);
     }
   };
 
@@ -47,7 +47,7 @@ const HomePage = () => {
       );
       setTotal(data?.total);
     } catch (error) {
-      console.log(error);
+      //(error);
     }
   };
   useEffect(() => {
@@ -64,7 +64,7 @@ const HomePage = () => {
       setLoading(false);
       setProducts([...products, ...data?.products]);
     } catch (error) {
-      console.log(error);
+      //(error);
       setLoading(false);
     }
   };
@@ -109,7 +109,7 @@ const HomePage = () => {
       );
       setProducts(data?.products);
     } catch (error) {
-      console.log(error);
+      //(error);
     }
   };
 
@@ -155,7 +155,7 @@ const HomePage = () => {
         {/* Main Content: Products */}
         <div className="md:w-3/4 w-full p-4">
           <h1 className="text-start text-xl font-bold">All Products</h1>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-5">
             {products.length > 0 ? (
               products.map((p) => (
@@ -188,17 +188,19 @@ const HomePage = () => {
                     <button
                       className="px-4 py-3 border bg-slate-500 text-white rounded-lg"
                       onClick={() => {
-                        // console.log("Current Cart:", cart); 
-                        // setCart([...cart, p]); 
+                        // //("Current Cart:", cart);
+                        // setCart([...cart, p]);
                         // localStorage.setItem('cart', JSON.stringify([...cart,p]))
                         // toast.success("Item Added successfully");
-                        setCart(prevCart => {
+                        setCart((prevCart) => {
                           const updatedCart = [...prevCart, p];
-                          localStorage.setItem('cart', JSON.stringify(updatedCart));
+                          localStorage.setItem(
+                            "cart",
+                            JSON.stringify(updatedCart)
+                          );
                           return updatedCart;
                         });
                         toast.success("Item Added successfully");
-                        
                       }}
                     >
                       Add to cart

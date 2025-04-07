@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import CategoryForm from "../../components/Form/CategoryForm";
 import { Modal } from "antd";
-import Swal from "sweetalert2";  // Import SweetAlert2
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 const CreateCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -35,7 +35,7 @@ const CreateCategory = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
+      //(error);
       toast.error("Something went wrong in input form");
     }
   };
@@ -55,7 +55,7 @@ const CreateCategory = () => {
         setCategories(data?.categories);
       }
     } catch (error) {
-      console.log(error);
+      //(error);
       toast.error("Something went wrong in getting categories");
     }
   };
@@ -73,7 +73,9 @@ const CreateCategory = () => {
     }
     try {
       const { data } = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/v1/category/update-category/${selected._id}`,
+        `${import.meta.env.VITE_API_URL}/api/v1/category/update-category/${
+          selected._id
+        }`,
         { name: updatedName },
         {
           headers: {
@@ -90,7 +92,7 @@ const CreateCategory = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.log(error);
+      //(error);
       toast.error("Something went wrong during category update");
     }
   };
@@ -109,10 +111,14 @@ const CreateCategory = () => {
       if (result.isConfirmed) {
         try {
           const { data } = await axios.delete(
-            `${import.meta.env.VITE_API_URL}/api/v1/category/delete-category/${id}`,
+            `${
+              import.meta.env.VITE_API_URL
+            }/api/v1/category/delete-category/${id}`,
             {
               headers: {
-                Authorization: `${JSON.parse(localStorage.getItem("auth")).token}`,
+                Authorization: `${
+                  JSON.parse(localStorage.getItem("auth")).token
+                }`,
               },
             }
           );
@@ -127,7 +133,7 @@ const CreateCategory = () => {
             toast.error(data.message);
           }
         } catch (error) {
-          console.log(error);
+          //(error);
           toast.error("Something went wrong during category deletion");
         }
       }
@@ -146,7 +152,11 @@ const CreateCategory = () => {
           <div className="w-3/4 mt-3">
             <h2>Manage Category</h2>
             <div className="p-4">
-              <CategoryForm handleSubmit={handleSubmit} value={name} setValue={setName} />
+              <CategoryForm
+                handleSubmit={handleSubmit}
+                value={name}
+                setValue={setName}
+              />
             </div>
             <div className="overflow-x-auto w-full">
               <table className="w-1/2 border-collapse border border-gray-300">
@@ -188,7 +198,11 @@ const CreateCategory = () => {
               footer={null}
               visible={visible}
             >
-              <CategoryForm handleSubmit={handleUpdate} value={updatedName} setValue={setUpdatedName} />
+              <CategoryForm
+                handleSubmit={handleUpdate}
+                value={updatedName}
+                setValue={setUpdatedName}
+              />
             </Modal>
           </div>
         </div>

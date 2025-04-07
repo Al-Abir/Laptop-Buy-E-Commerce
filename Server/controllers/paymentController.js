@@ -75,7 +75,7 @@ const paymentController = async (req, res) => {
         const apiResponse = await sslcz.init(data);
         let GatewayPageURL = apiResponse.GatewayPageURL;
         res.send({ url: GatewayPageURL });
-        console.log('Redirecting to: ', GatewayPageURL);
+        //('Redirecting to: ', GatewayPageURL);
     } catch (error) {
         console.error("SSLCommerz Init Error:", error);
         res.status(500).json({ error: "Payment initialization failed" });
@@ -120,7 +120,7 @@ const paymentFail = async (req, res) => {
 
         await Order.findOneAndDelete({ transactionId: extractedTranId });
 
-        console.log("Order deletion successful due to payment failure.");
+        //("Order deletion successful due to payment failure.");
         res.redirect(`${process.env.CLIENT_URL}/payment/fail`);
     } catch (error) {
         console.error("Payment Fail Error:", error);

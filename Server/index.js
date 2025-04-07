@@ -1,6 +1,6 @@
 const express = require('express')
 const dotenv = require('dotenv')
-const morgan = require('morgan');
+
 const connectDB = require('./confiq/db');
 const authRoutes = require('./routes/authRoute')
 const categoryRoutes  = require('./routes/CategoryRoutes')
@@ -44,7 +44,6 @@ app.use(cors({
 app.use(mongoSanitize()); 
 app.use(xss());
 app.use(hpp());  
-app.use(morgan('dev'));
 
 // Routes
 app.use('/api/v1/auth', authRoutes);
@@ -59,5 +58,5 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-  console.log(`Server is Running on PORT ${PORT}`);
+  
 });

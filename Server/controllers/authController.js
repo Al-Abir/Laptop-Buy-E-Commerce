@@ -87,7 +87,7 @@ const loginController = async(req,res) => {
             token
         });
     }catch (error) {
-        console.log(error);
+        //(error);
         res.status(500).send({
             success:false,
             message:"Error in login",
@@ -165,7 +165,7 @@ const getOrdersController = async (req, res) => {
 
         
       } catch (error) {
-           console.log(error)
+           //(error)
            res.status(500).send({
             success:false,
             message:"Error while geting orders",
@@ -176,20 +176,20 @@ const getOrdersController = async (req, res) => {
 };
 const getAllOrdersController = async (req, res) => { 
     try {
-        console.log("Starting to fetch orders..."); // Add this
+        //("Starting to fetch orders..."); // Add this
         const allorders = await orderModel
             .find({})
             .populate("products", "-photo")
             .populate("buyer", "name")
             
-        console.log("Orders fetched successfully:", allorders.length); // Add this
+        //("Orders fetched successfully:", allorders.length); // Add this
         
         res.status(200).send({
             success: true,
             allorders
         });
     } catch (error) {
-        console.log("Full error:", error); // Enhanced logging
+        //("Full error:", error); // Enhanced logging
         res.status(500).send({
             success: false,
             message: "Error while getting orders",
@@ -215,7 +215,7 @@ const orderStatusController = async(req,res) =>{
             })
             
         } catch (error) {
-           console.log(error)  
+           //(error)  
            res.status(500).send({
             success:false,
             message:"Error while updateing order"
