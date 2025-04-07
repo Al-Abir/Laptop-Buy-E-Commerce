@@ -1,9 +1,29 @@
 import React from 'react';
 import Layout from '../components/Layout/Layout';
 import { useSearch } from '../context/search';
+import { useCart } from '../context/cart';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Search = () => {
   const [values] = useSearch();
+  const [cart, setCart] = useCart();
+  const navigate = useNavigate(); // useNavigate hook for navigation
+
+  const handleAddToCart = (product) => {
+    // Add the product to the cart
+    setCart((prevCart) => {
+      const updatedCart = [...prevCart, product];
+      localStorage.setItem('cart', JSON.stringify(updatedCart)); // Store in localStorage
+      toast.success("Item added to cart!");
+      return updatedCart;
+    });
+  };
+
+  const handleMoreDetails = (slug) => {
+    // Navigate to the product details page
+    navigate(`/product/${slug}`);
+  };
 
   return (
     <Layout title={'Search results'}>
@@ -38,10 +58,17 @@ const Search = () => {
                     </p>
                   </div>
                   <div className="flex gap-4 mt-4">
-                    <button className="px-4 py-2 border bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                    {/* More Details button */}
+                    <button
+                      className="px-4 py-2 border bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                      onClick={() => handleMoreDetails(p.slug)} // Navigate to product details
+                    >
                       More Details
                     </button>
-                    <button className="px-4 py-2 border bg-slate-500 text-white rounded-lg hover:bg-slate-600 transition">
+                    <button
+                      className="px-4 py-2 border bg-slate-500 text-white rounded-lg hover:bg-slate-600 transition"
+                      onClick={() => handleAddToCart(p)} // Add to cart functionality
+                    >
                       Add to Cart
                     </button>
                   </div>
